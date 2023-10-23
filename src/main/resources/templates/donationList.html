@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách người dùng</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center">Danh sách các quỹ từ thiện</h2>
+    <form th:action="@{/admin/donation/search}" method="post">
+        <div class="input-group">
+            <label>
+                <input type="text" class="form-control" placeholder="Tìm kiếm..." name="keyword">
+            </label>
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <br><br>
+    <a class="btn btn-primary" th:href="@{/admin/donation/new}">Thêm mới</a>
+    <br><br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Mã số</th>
+            <th>Tên quỹ</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th>Tổ chức gây quỹ</th>
+            <th>Số điện thoại</th>
+            <th>Nội dung quyên góp</th>
+            <th>Trạng thái</th>
+            <th>Điều chỉnh</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="!${donations}">
+            Không có quỹ từ thiện nào được đăng ký
+        </tr>
+        <tr th:each="donation : ${donations}">
+            <td th:text="${donation.code}"></td>
+            <td th:text="${donation.name}"></td>
+            <td th:text="${donation.start}"></td>
+            <td th:text="${donation.end}"></td>
+            <th th:text="${donation.organization}"></th>
+            <th th:text="${donation.phone}"></th>
+            <th th:text="${donation.description}"></th>
+            <td th:text="${donation.status}"></td>
+            <td>
+                <a class="btn btn-primary" th:if="!${donation.status.equalsIgnoreCase('ended')}" th:href="@{/admin/donation/update (id = ${donation.id})}">Sửa</a>
+                <a class="btn btn-warning" th:href="@{/admin/donation/info (id = ${donation.id})}">Chi tiết</a>
+                <a class="btn btn-danger" th:href="@{/admin/donation/delete (id = ${donation.id})}" onclick="return confirmDelete();">Xóa</a>
+                <a class="btn btn-secondary" th:if="${donation.status.equalsIgnoreCase('active')}" th:href="@{/admin/donation/end (id = ${donation.id})}" onclick="return confirmEnd();">Kết thúc</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function confirmDelete() {
+        return window.confirm("Xác nhận xóa quỹ từ thiện này?");
+    }
+
+    function confirmEnd() {
+        return window.confirm("Kết thúc tài khoản này?")
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

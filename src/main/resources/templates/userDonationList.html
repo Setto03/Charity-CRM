@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh sách người dùng</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/popup.css">
+</head>
+<body>
+
+  <div class="container mt-5">
+    <h2 class="text-center">Danh sách các quỹ từ thiện</h2>
+    <form th:action="@{/user/search}" method="post">
+      <div class="input-group">
+        <label>
+          <input type="text" class="form-control" placeholder="Tìm kiếm..." name="keyword">
+        </label>
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" type="submit">Search</button>
+        </div>
+      </div>
+    </form>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Mã số</th>
+        <th>Tên quỹ</th>
+        <th>Ngày bắt đầu</th>
+        <th>Ngày kết thúc</th>
+        <th>Tổ chức gây quỹ</th>
+        <th>Số điện thoại</th>
+        <th>Nội dung quyên góp</th>
+        <th>Trạng thái</th>
+        <th>Điều chỉnh</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="!${donations}">
+        Không có quỹ từ thiện nào được đăng ký
+      </tr>
+      <tr th:each="donation : ${donations}">
+        <td th:text="${donation.code}"></td>
+        <td th:text="${donation.name}"></td>
+        <td th:text="${donation.start}"></td>
+        <td th:text="${donation.end}"></td>
+        <th th:text="${donation.organization}"></th>
+        <th th:text="${donation.phone}"></th>
+        <th th:text="${donation.description}"></th>
+        <td th:text="${donation.status}"></td>
+        <td>
+          <button onclick="openPopupForm()" class="btn btn-primary" th:if="!${donation.status.equalsIgnoreCase('ended')}">Quyên góp</button>
+          <div id="popupForm" style="display: none;">
+            <form id="donateForm" th:action="@{/user/donate}" th:object="${donate}" method="post">
+              <div class="form-group">
+                <label for="name">Tên người ủng hộ:</label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Tên của bạn là...">
+              </div>
+              <div class="form-group">
+                <label for="money">Số tiền ủng hộ:</label>
+                <input type="number" class="form-control" id="money" th:field="*{money}">
+              </div>
+              <div class="form-group">
+                <label for="note">Ghi chú:</label>
+                <textarea class="form-control" id="note" th:field="*{note}" rows="4" placeholder="Chia sẻ những gì bạn đang nghĩ..."></textarea>
+              </div>
+              <input type="hidden" name="id" th:value="${donation.id}">
+              <button class="btn btn-secondary" onclick="closePopupForm()">Đóng</button>
+              <button class="btn btn-primary" onclick="submitForm()">Xác nhận</button>
+            </form>
+          </div>
+          <a class="btn btn-warning" th:href="@{/user/info (id = ${donation.id})}">Chi tiết</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="overlay" id="overlay"></div>
+
+
+<script>
+  // Function to open the popup form
+  function openPopupForm() {
+    const popupForm = document.getElementById("popupForm");
+    popupForm.style.display = "block";
+  }
+
+  // Function to close the popup form
+  function closePopupForm() {
+    const popupForm = document.getElementById("popupForm");
+    popupForm.style.display = "none";
+  }
+
+  // Function to submit the form
+  function submitForm() {
+    const form = document.getElementById("donateForm");
+    form.submit();
+    closePopupForm();
+  }
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
