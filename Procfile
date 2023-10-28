@@ -1,1 +1,1 @@
-web: java -jar build/libs/PRJ321x_ASM01_duongptFX19035-0.0.1-SNAPSHOT.jar
+web: java -jar target/PRJ321x_ASM01_duongptFX19035-0.0.1-SNAPSHOT.war

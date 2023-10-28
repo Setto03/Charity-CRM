@@ -12,6 +12,7 @@
     <artifactId>PRJ321x_ASM01_duongptFX19035</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>PRJ321x_ASM01_duongptFX19035</name>
+    <packaging>war</packaging>
     <description>PRJ321x_ASM01_duongptFX19035</description>
     <properties>
         <java.version>17</java.version>
