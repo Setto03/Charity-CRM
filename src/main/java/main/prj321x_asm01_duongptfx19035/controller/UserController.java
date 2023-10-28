@@ -15,11 +15,12 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
     private final DonationService donationService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
     public String mainPage(Model model) {
         List<Donation> donations = donationService.getDonationList();
 
@@ -62,6 +63,6 @@ public class UserController {
 
         donationService.processDonate(id, userDonation);
 
-        return "redirect:/user/";
+        return "redirect:/user/main";
     }
 }
