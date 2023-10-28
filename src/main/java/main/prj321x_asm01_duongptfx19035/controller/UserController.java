@@ -15,12 +15,11 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/user")
 public class UserController {
 
     private final DonationService donationService;
 
-    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String mainPage(Model model) {
         List<Donation> donations = donationService.getDonationList();
 
@@ -58,11 +57,11 @@ public class UserController {
     public String processDonateInfo(@ModelAttribute(name = "donate") UserDonation userDonation,
                                     @RequestParam(name = "id") int id) {
         if (userDonation.getMoney() == 0) {
-            return "redirect:/user/main";
+            return "redirect:/user/";
         }
 
         donationService.processDonate(id, userDonation);
 
-        return "redirect:/user/main";
+        return "redirect:/user/";
     }
 }
